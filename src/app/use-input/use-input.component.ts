@@ -1,6 +1,6 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { InvertmentInput } from '../investment-input.model';
+import { InvestmentService } from './../investment.service';
 
 
 @Component({
@@ -13,7 +13,8 @@ import type { InvertmentInput } from '../investment-input.model';
 export class UseInputComponent {
 
   // @Output() calculate = new EventEmitter<InvertmentInput>();
-  calculate = output<InvertmentInput>();
+  // calculate = output<InvertmentInput>();
+  constructor(private investmentService: InvestmentService) { }
 
   formState = signal({
     enteredInitialInverstment: '0',
@@ -23,12 +24,12 @@ export class UseInputComponent {
   });
   onSubmit() {
     const state = this.formState();
-    this.calculate.emit({
+    this.investmentService.onCalculateInvertimentResults({
       initialInvestment: +state.enteredInitialInverstment,
       duration: +state.enteredDuration,
       expectedReturn: +state.enteredExpectedReturn,
       annualInvestment: +state.enteredAnnualInvestment
-    });
+    })
 
     this.formState.set({
       enteredInitialInverstment: '0',
